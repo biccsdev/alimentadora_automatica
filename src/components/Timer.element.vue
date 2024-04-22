@@ -2,7 +2,7 @@
   <div>
     <div class="porcion-main-container">
       <img src="/src/assets/icons/timer.svg" width="28px" />
-      <div>{{ time_data }}</div>
+      <div>{{ timeLeftForPropTime }}</div>
     </div>
   </div>
 </template>
@@ -11,29 +11,39 @@
 export default {
   data() {
     return {
-      time_data: this.time_left,
+      currentTime: new Date(),
     };
   },
   methods: {
-    // Your methods go here
+    calculateTimeLeft(propTime) {
+      const now = this.currentTime;
+      const propDateTime = new Date(now.toDateString() + " " + propTime);
+      if (now > propDateTime) {
+        propDateTime.setDate(propDateTime.getDate() + 1);
+      }
+      const diff = propDateTime - now;
+      const hours = Math.floor(diff / 3.6e6);
+      const mins = Math.floor((diff % 3.6e6) / 6e4);
+      const secs = Math.floor((diff % 6e4) / 1000);
+      //   return `${hours} hours, ${mins} minutes, and ${secs} seconds`;
+      return `${hours} : ${mins} : ${secs} `;
+    },
   },
-  computed: {},
-  watch: {
-    // Your watchers go here
-  },
-  components: {
-    // Your child components go here
+  computed: {
+    timeLeftForPropTime() {
+      return this.calculateTimeLeft(this.propTime);
+    },
   },
   props: {
-    time_left: {
-      default: null,
+    propTime: {
+      type: String,
+      required: true,
     },
   },
   mounted() {
-    // Code to run when the component is mounted
-  },
-  beforeDestroy() {
-    // Code to run before the component is destroyed
+    setInterval(() => {
+      this.currentTime = new Date();
+    }, 1000);
   },
 };
 </script>

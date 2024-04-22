@@ -3,7 +3,7 @@
     <div class="dashboard-container">
       <Contenedor :porcentaje="datos.restante_contenedor" class="component1" />
       <Porcion :porcion="datos.porcion_comida" class="component2" />
-      <Timer :time_left="datos.timer" class="component3" />
+      <Timer :propTime="datos.timer" class="component3" />
       <Horario :horario="datos.horarios" class="component4" />
     </div>
     <div class="graph-container"></div>
@@ -15,10 +15,10 @@ export default {
   data() {
     return {
       datos: {
-        restante_contenedor: "90",
+        restante_contenedor: "80",
         porcion_comida: "125",
-        timer: "4:43",
-        horarios: ["6:00", "12:00", "6:00"],
+        timer: "14:43:00",
+        horarios: ["6:00:00", "12:00:00", "6:00:00"],
       },
     };
   },
