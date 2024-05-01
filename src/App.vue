@@ -2,7 +2,7 @@
   <div>
     <div class="dashboard-container">
       <Contenedor :porcentaje="datos.restante_contenedor" class="component1" />
-      <Porcion :porcion="datos.porcion_comida" class="component2" />
+      <Porcion :porcionProp="datos.porcion_comida" class="component2" />
       <Timer :propTime="datos.timer" class="component3" />
       <Horario :horario="datos.horarios" class="component4" />
     </div>
@@ -17,16 +17,18 @@ export default {
   data() {
     return {
       datos: {
-        restante_contenedor: "80",
+        restante_contenedor: "",
         porcion_comida: "",
-        timer: "14:43:00",
-        horarios: ["6:00:00", "12:00:00", "6:00:00"],
+        timer: "",
+        horarios: ["", "", ""],
       },
     };
   },
   async mounted() {
     this.datos.porcion_comida = await this.getPorcion();
-    console.log(this.datos.porcion_comida);
+    this.datos.restante_contenedor = await this.getRestanteContenedor();
+    this.datos.horarios = await this.getHorarios();
+    this.datos.timer = await this.getTimer();
   },
   methods: {
     async getPorcion() {
@@ -36,6 +38,40 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    async getRestanteContenedor() {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/contenedor");
+        return response.data[0].porcentaje_contenedor;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getHorarios() {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/latest");
+        let horarios = [];
+        horarios.push(response.data[0].morning.slice(11));
+        horarios.push(response.data[0].lunch.slice(11));
+        horarios.push(response.data[0].dinner.slice(11));
+        return horarios;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getTimer() {
+      const now = new Date();
+      let horarios = this.datos.horarios.map((time) => {
+        const [hours, minutes, seconds] = time.split(":").map(Number);
+        const date = new Date();
+        date.setHours(hours, minutes, seconds, 0);
+        return date;
+      });
+
+      const nextTime = horarios.find((time) => time > now);
+      return nextTime
+        ? nextTime.toLocaleTimeString()
+        : "No upcoming times found";
     },
   },
   computed: {

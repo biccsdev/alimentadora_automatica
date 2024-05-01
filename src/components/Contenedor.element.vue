@@ -2,12 +2,9 @@
   <div class="main-contenedor">
     <img src="/src/assets/icons/food.svg" width="28px" />
     <div class="barra">
-      <div
-        class="barra-inside"
-        :style="{ width: 100 - porcentaje_data + '%' }"
-      />
+      <div class="barra-inside" :style="{ width: 100 - porcentaje + '%' }" />
     </div>
-    <div>{{ porcentaje_data }}%</div>
+    <div>{{ porcentaje }}%</div>
   </div>
 </template>
 

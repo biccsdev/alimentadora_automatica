@@ -6,7 +6,7 @@
         style="display: flex; align-items: center; flex-direction: column"
       >
         <img :src="item.file" width="28px" height="28px" />
-        <div>{{ item.time }}</div>
+        <div>{{ horario[index] }}</div>
       </div>
     </div>
     <div v-if="showContainer" class="container" @click="closeContainer">
@@ -18,12 +18,12 @@
             <input
               type="text"
               style="width: 90px; padding: 4px"
-              v-model="item.time"
-              @input="item.showButton = true"
+              v-model="horario[index]"
+              @input="updateHorario($event, index)"
             />
             <button
               v-if="item.showButton"
-              @click="sendData(item)"
+              @click="sendData(index)"
               style="
                 background-color: #8ec48e;
                 width: 28px;
@@ -62,22 +62,55 @@ export default {
       showContainer: false,
     };
   },
+
   methods: {
+    updateHorario(event, index) {
+      this.horario[index] = event.target.value;
+      this.horario_data[index].showButton = true;
+    },
     openContainer() {
       this.showContainer = true;
     },
     closeContainer() {
       this.showContainer = false;
     },
-    sendData(item) {
-      item.showButton = false;
-      // replace 'your_api_url' with the actual API URL
-      fetch("your_api_url", {
-        method: "POST",
+    transformDateFormat(date) {
+      let parts = date.split("/");
+      if (parts.length !== 3) {
+        return "Invalid date format";
+      }
+      let [month, day, year] = parts;
+      if (month.length === 1) {
+        month = "0" + month;
+      }
+      if (day.length === 1) {
+        day = "0" + day;
+      }
+      return `${month}/${day}/${year}`;
+    },
+    sendData(index) {
+      this.horario_data[index].showButton = false;
+      let date = new Date();
+      date = date.toLocaleDateString();
+      date = this.transformDateFormat(date);
+      console.log(date);
+      fetch("http://127.0.0.1:8000/updatePropertyItem", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: item.time }),
+        body: JSON.stringify({
+          porcentaje_contenedor: "",
+          fecha: "",
+          morning: date + " " + this.horario[0],
+          morning_porcion: "",
+          lunch: date + " " + this.horario[1],
+          lunch_porcion: "",
+          dinner: date + " " + this.horario[2],
+          dinner_porcion: "",
+          porcion: "",
+          ultima_comida: "",
+        }),
       });
     },
   },

@@ -13,8 +13,8 @@
             <input
               type="text"
               style="width: 90px; padding: 4px"
-              v-model="porcion_data"
-              @input="showButton = true"
+              :value="porcion"
+              @input="updatePorcion"
             />
             <button
               v-if="showButton"
@@ -59,7 +59,7 @@
 export default {
   data() {
     return {
-      porcion_data: this.porcion,
+      porcion: this.porcionProp,
       showContainer: false,
       showButton: false,
       data: [
@@ -229,10 +229,17 @@ export default {
       ],
     };
   },
-  mounted() {
-    console.log("porcion");
+  mounted() {},
+  watch: {
+    porcionProp(newVal) {
+      this.porcion = newVal;
+    },
   },
   methods: {
+    updatePorcion(event) {
+      this.porcion = event.target.value;
+      this.showButton = true;
+    },
     getDate(dateStr) {
       // Create a new Date object
       var date = new Date(dateStr);
@@ -256,13 +263,23 @@ export default {
     },
     sendData() {
       this.showButton = false;
-      // replace 'your_api_url' with the actual API URL
-      fetch("your_api_url", {
-        method: "POST",
+      fetch("http://127.0.0.1:8000/updatePropertyItem", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: this.porcion_data }),
+        body: JSON.stringify({
+          porcentaje_contenedor: "",
+          fecha: "",
+          morning: "",
+          morning_porcion: "",
+          lunch: "",
+          lunch_porcion: "",
+          dinner: "",
+          dinner_porcion: "",
+          porcion: this.porcion,
+          ultima_comida: "",
+        }),
       });
     },
     getColor(value) {
@@ -276,7 +293,7 @@ export default {
     },
   },
   props: {
-    porcion: {
+    porcionProp: {
       default: null,
     },
   },
