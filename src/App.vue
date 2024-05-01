@@ -11,19 +11,32 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       datos: {
         restante_contenedor: "80",
-        porcion_comida: "125",
+        porcion_comida: "",
         timer: "14:43:00",
         horarios: ["6:00:00", "12:00:00", "6:00:00"],
       },
     };
   },
+  async mounted() {
+    this.datos.porcion_comida = await this.getPorcion();
+    console.log(this.datos.porcion_comida);
+  },
   methods: {
-    // Your methods go here
+    async getPorcion() {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/porcion");
+        return response.data[0].porcion;
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   computed: {
     // Your computed properties go here
@@ -36,9 +49,6 @@ export default {
   },
   props: {
     // Your props go here
-  },
-  mounted() {
-    // Code to run when the component is mounted
   },
   beforeDestroy() {
     // Code to run before the component is destroyed

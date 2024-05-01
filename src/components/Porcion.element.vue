@@ -2,7 +2,7 @@
   <div>
     <div class="porcion-main-container" @click="openContainer">
       <img src="/src/assets/icons/plato.svg" width="28px" />
-      <div>{{ porcion_data }} gr</div>
+      <div>{{ porcion }} gr</div>
     </div>
     <div v-if="showContainer" class="container" @click="closeContainer">
       <div class="content" @click.stop>
@@ -228,6 +228,9 @@ export default {
         // Add more objects as needed
       ],
     };
+  },
+  mounted() {
+    console.log("porcion");
   },
   methods: {
     getDate(dateStr) {
