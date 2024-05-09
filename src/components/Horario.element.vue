@@ -94,7 +94,7 @@ export default {
       date = date.toLocaleDateString();
       date = this.transformDateFormat(date);
       console.log(date);
-      fetch("http://127.0.0.1:8000/updatePropertyItem", {
+      fetch("http://127.0.0.1:8000/api/updatePropertyItem", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

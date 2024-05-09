@@ -33,7 +33,7 @@ export default {
   methods: {
     async getPorcion() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/porcion");
+        const response = await axios.get("http://127.0.0.1:8000/api/porcion");
         return response.data[0].porcion;
       } catch (error) {
         console.error(error);
@@ -41,7 +41,9 @@ export default {
     },
     async getRestanteContenedor() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/contenedor");
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/contenedor"
+        );
         return response.data[0].porcentaje_contenedor;
       } catch (error) {
         console.error(error);
@@ -49,7 +51,7 @@ export default {
     },
     async getHorarios() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/latest");
+        const response = await axios.get("http://127.0.0.1:8000/api/latest");
         let horarios = [];
         horarios.push(response.data[0].morning.slice(11));
         horarios.push(response.data[0].lunch.slice(11));

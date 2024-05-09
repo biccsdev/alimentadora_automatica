@@ -16,6 +16,7 @@ export default {
   },
   methods: {
     calculateTimeLeft(propTime) {
+      console.log(propTime);
       const now = this.currentTime;
       const propDateTime = new Date(now.toDateString() + " " + propTime);
       if (now > propDateTime) {

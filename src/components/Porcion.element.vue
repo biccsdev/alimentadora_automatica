@@ -16,7 +16,7 @@
               :value="porcion"
               @input="updatePorcion"
             />
-            <button
+            <!-- <button
               v-if="showButton"
               @click="sendData"
               style="
@@ -25,7 +25,7 @@
                 height: 28px;
                 border-radius: 4px;
               "
-            />
+            /> -->
           </div>
         </div>
         <div class="table-container">
@@ -43,9 +43,9 @@
             <tbody>
               <tr v-for="item in data" :key="item.timedate">
                 <td>{{ getDate(item.timedate) }}</td>
-                <td :class="getColor(item.morning)">{{ item.morning }}%</td>
-                <td :class="getColor(item.lunch)">{{ item.lunch }}%</td>
-                <td :class="getColor(item.dinner)">{{ item.dinner }}%</td>
+                <td :class="getColor(item.morning)">{{ item.morning }}gr</td>
+                <td :class="getColor(item.lunch)">{{ item.lunch }}gr</td>
+                <td :class="getColor(item.dinner)">{{ item.dinner }}gr</td>
               </tr>
             </tbody>
           </table>
@@ -263,7 +263,7 @@ export default {
     },
     sendData() {
       this.showButton = false;
-      fetch("http://127.0.0.1:8000/updatePropertyItem", {
+      fetch("http://127.0.0.1:8000/api/updatePropertyItem", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
